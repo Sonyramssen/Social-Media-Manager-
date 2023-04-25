@@ -1,7 +1,4 @@
 <?php 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 require_once '/Applications/XAMPP/xamppfiles/htdocs/SWEProject/vendor/autoload.php';
 
 use Google\Service\YouTubeAnalytics;
@@ -25,12 +22,12 @@ if ($client->getAccessToken()) {
     $youtubeAnalytics = new YouTubeAnalytics($client);
 
     // Define the parameters for the API request
-    $params = array(
-        'ids' => 'UCFzLu9ipnbh6dN_lFLWxo2Q',
-        'start-date' => '2023-04-01',
-        'end-date' => '2023-04-23',
+   $params = array(
+        'ids' => 'channel==UCFzLu9ipnbh6dN_lFLWxo2Q',
+        'startDate' => '2016-04-01',
+        'endDate' => '2023-04-23',
         'metrics' => 'views,likes,dislikes',
-        'dimensions' => 'video'
+        'dimensions' => 'day',
     );
 
     // Call the API and retrieve the analytics data
@@ -38,15 +35,24 @@ if ($client->getAccessToken()) {
 
     // Print the analytics data
     if (!empty($response->getRows())) {
+        echo '<table style="border-collapse: collapse; width: 100%;">';
+        echo '<tr>';
+        echo '<th style="border: 1px solid #ddd; padding: 8px;">Video</th>';
+        echo '<th style="border: 1px solid #ddd; padding: 8px;">Views</th>';
+        echo '<th style="border: 1px solid #ddd; padding: 8px;">Likes</th>';
+        echo '<th style="border: 1px solid #ddd; padding: 8px;">Dislikes</th>';
+        echo '</tr>';
         foreach ($response->getRows() as $row) {
-            echo 'Video: ' . $row[0] . '<br>';
-            echo 'Views: ' . $row[1] . '<br>';
-            echo 'Likes: ' . $row[2] . '<br>';
-            echo 'Dislikes: ' . $row[3] . '<br>';
-            echo '<br>';
+            echo '<tr>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . $row[0] . '</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . $row[1] . '</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . $row[2] . '</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . $row[3] . '</td>';
+            echo '</tr>';
         }
+        echo '</table>';
     } else {
-        echo 'No data available.';
+        echo 'There is nothing in this channel';
     }
 } else {
     $authUrl = $client->createAuthUrl();
